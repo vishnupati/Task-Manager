@@ -1,0 +1,56 @@
+<div class="container mt-3 text-contrast">
+  <h5>{{taskData? "Edit task": "Add task"}}</h5>
+    <form [formGroup]="taskForm">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-12 col-mb-4">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label> Title <span class="mandetory">*</span> </label>
+                        <input type="text" class="form-control" formControlName="title" placeholder="Please enter title"
+                        [ngClass]="{ 'is-invalid': submitted && f['title'].errors }" />
+                        <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
+                          <div *ngIf="f['title'].errors['required']">Title is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea rows="2" type="text" class="form-control" formControlName="description"  placeholder="Please enter description"></textarea>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                          <label> Status <span class="mandetory">*</span></label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" formControlName="status" id="status1" value="Pending">
+                          <label class="form-check-label" for="status1">
+                            Pending
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" formControlName="status" id="status2" value="Completed">
+                          <label class="form-check-label" for="status2">
+                            Completed
+                          </label>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-end mb-3">
+                      <div class="col-6 col-md-4 col-sm-4 d-grid">
+                        <button class="btn back-btn btn-block" type="button" [disabled]="loading" (click)="back()">
+                          <span>Back</span>
+                        </button>
+                      </div>
+                      <div class="col-6 col-md-4 col-sm-4 d-grid">
+                        <button class="btn btn-primary text-light" type="submit" [disabled]="loading" (click)="addEditTask()">
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span> {{taskData ? "Save changes" : 'Add task'}}
+                        </button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>

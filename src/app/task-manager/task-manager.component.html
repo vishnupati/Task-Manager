@@ -1,0 +1,86 @@
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-md-10 offset-1">
+            <div class="card">
+                <div class="card-header p-2">
+                    <div class="total-item d-flex align-items-center justify-content-center">
+                        <label class="text-justify text-dark fw-bold">Total Task: {{allTaskData.length}}</label>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-4 d-flex align-items-center">
+                            <h6 class="text-dark fw-bold mb-0"><i class="bi bi-card-list"></i> Task lists</h6>
+                        </div>
+                        <div class="col-8 col-padding">
+                            <div class="float-end">
+                                <button class="btn btn-sm rounded-pill bnt-color" routerLink="/add-task"><i
+                                        class="bi bi-plus"></i> Add new</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col p-0">
+                            <div class="table-responsive">
+                                <!-- <ng-container *ngIf="$any(allTaskData$ | async ) as allTaskData; else noData"> -->
+                                <div *ngIf="allTaskData.length > 0">
+                                    <table class="table table-borderless table-hover">
+                                        <thead class="text-center">
+                                            <tr class="table-head-border">
+                                                <th class="text-start text-dark fw-bold">Title</th>
+                                                <th class="table-item-border text-dark fw-bold">Description</th>
+                                                <th class="table-item-border text-dark fw-bold">Status</th>
+                                                <th class="table-item-border text-dark fw-bold">Created Date</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr class="text-center item-row"
+                                                *ngFor="let data of allTaskData; let i = index" role="button">
+                                                <td class="text-start">
+                                                    <label> {{data.title}} </label> <br>
+                                                </td>
+
+                                                <td class="text-center table-item-border text-end  text-dark ">
+                                                    {{(data.description.length > 35) ? ((data.description).slice(0, 35)
+                                                    + '...') : data.description}}
+                                                </td>
+
+                                                <td class="text-center table-item-border text-dark">
+                                                    <span>{{data.status}}</span>
+                                                </td>
+
+                                                <td class="text-center table-item-border text-dark">
+                                                    <span>{{data.createdAt | date}}</span>
+                                                </td>
+
+                                                <!-- <td></td> -->
+                                                <td>
+                                                    <button class="btn small rounded-circle btn-primary edit-btn"  routerLink="/edit-task/{{data.id}}"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn small rounded-circle btn-danger" (click)="removeTask(data)"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div *ngIf="allTaskData.length === 0" class="text-center">
+                                    <label class="p-4 border-0 text-opacity">No data found</label>
+                                </div>
+                                <!-- </ng-container> -->
+
+                                <!-- <ng-template #noData>
+                            <div class="p-2">
+                              <label class="p-2"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</label>
+                            </div>
+                          </ng-template> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
