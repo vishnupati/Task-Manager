@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://localhost:5000/tasks';
+const API_URL = 'https://task-management-backend-lwdq.onrender.com/api/tasks';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class TaskService {
   }
 
   updateTask(id: string, task: any): Observable<any> {
-    return this.http.put(`${API_URL}/${id}`, task);
+    return this.http.patch(`${API_URL}/${id}`, task);
   }
 
   deleteTask(id: string): Observable<any> {
@@ -27,6 +27,6 @@ export class TaskService {
   }
 
   getTaskById(id: string) {
-    return this.http.delete(`${API_URL}/${id}`);
+    return this.http.get(`${API_URL}/${id}`);
   }
 }

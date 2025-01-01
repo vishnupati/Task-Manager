@@ -77,7 +77,7 @@ export class AddEditTaskComponent implements OnInit {
       return;
     }
     if (this.taskData) {
-      this.taskService.updateTask(this.taskData.id, this.taskForm.value).subscribe(() => {
+      this.taskService.updateTask(this.taskData._id, this.taskForm.value).subscribe(() => {
         this.router.navigate(['/']);
         this.taskForm.reset();
         this.loading = false;

@@ -21,15 +21,9 @@
                           </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3" *ngIf="taskData">
                         <div class="col">
                           <label> Status <span class="mandetory">*</span></label>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" formControlName="status" id="status1" value="Pending">
-                          <label class="form-check-label" for="status1">
-                            Pending
-                          </label>
-                        </div>
                         <div class="form-check">
                           <input class="form-check-input" type="radio" formControlName="status" id="status2" value="Completed">
                           <label class="form-check-label" for="status2">
