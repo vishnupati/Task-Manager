@@ -1,6 +1,6 @@
 <div class="container-fluid mt-3">
     <div class="row">
-        <div class="col-md-10 offset-1">
+        <div class="col-md-10 offset-md-1 col-12">
             <div class="card">
                 <div class="card-header p-2">
                     <div class="total-item d-flex align-items-center justify-content-center">
@@ -26,37 +26,40 @@
                             <div class="table-responsive">
                                 <div *ngIf="allTaskData.length > 0">
                                     <table class="table table-borderless table-hover">
-                                        <thead class="text-center">
+                                        <thead class="">
                                             <tr class="table-head-border">
                                                 <th class="text-start text-dark fw-bold">Title</th>
                                                 <th class="table-item-border text-dark fw-bold">Description</th>
                                                 <th class="table-item-border text-dark fw-bold">Status</th>
                                                 <th class="table-item-border text-dark fw-bold">Created Date</th>
-                                                <th></th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <tr class="text-center item-row"
+                                            <tr class="item-row"
                                                 *ngFor="let data of allTaskData; let i = index" role="button">
                                                 <td class="text-start">
                                                     <label> {{data.title}} </label> <br>
                                                 </td>
 
-                                                <td class="text-center table-item-border text-end  text-dark ">
+                                                <td class=" table-item-border text-dark ">
                                                     {{(data.description.length > 35) ? ((data.description).slice(0, 35)
-                                                    + '...') : data.description}}
+                                                    + '...') : !data.description && data.description === "" ? "NA": data.description}}
                                                 </td>
 
-                                                <td class="text-center table-item-border text-dark">
+                                                <td class=" table-item-border text-dark">
                                                     <span>{{data.status}}</span>
                                                 </td>
 
-                                                <td class="text-center table-item-border text-dark">
+                                                <td class="table-item-border text-dark">
                                                     <span>{{data.createdAt | date}}</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn small rounded-circle btn-primary edit-btn"  routerLink="/edit-task/{{data._id}}"><i class="bi bi-pencil"></i></button>
+                                                </td>
+                                                <td>
                                                     <button class="btn small rounded-circle btn-danger" (click)="removeTask(data)"><i class="bi bi-trash"></i></button>
                                                 </td>
                                             </tr>
