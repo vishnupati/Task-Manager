@@ -24,7 +24,6 @@
                     <div class="row">
                         <div class="col p-0">
                             <div class="table-responsive">
-                                <!-- <ng-container *ngIf="$any(allTaskData$ | async ) as allTaskData; else noData"> -->
                                 <div *ngIf="allTaskData.length > 0">
                                     <table class="table table-borderless table-hover">
                                         <thead class="text-center">
@@ -56,8 +55,6 @@
                                                 <td class="text-center table-item-border text-dark">
                                                     <span>{{data.createdAt | date}}</span>
                                                 </td>
-
-                                                <!-- <td></td> -->
                                                 <td>
                                                     <button class="btn small rounded-circle btn-primary edit-btn"  routerLink="/edit-task/{{data._id}}"><i class="bi bi-pencil"></i></button>
                                                     <button class="btn small rounded-circle btn-danger" (click)="removeTask(data)"><i class="bi bi-trash"></i></button>
@@ -67,15 +64,9 @@
                                     </table>
                                 </div>
                                 <div *ngIf="allTaskData.length === 0" class="text-center">
-                                    <label class="p-4 border-0 text-opacity">No data found</label>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+                                    <label class="p-4 border-0 text-opacity" *ngIf="!loading">No data found</label>
                                 </div>
-                                <!-- </ng-container> -->
-
-                                <!-- <ng-template #noData>
-                            <div class="p-2">
-                              <label class="p-2"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</label>
-                            </div>
-                          </ng-template> -->
                             </div>
                         </div>
                     </div>

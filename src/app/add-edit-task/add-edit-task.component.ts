@@ -37,7 +37,7 @@ export class AddEditTaskComponent implements OnInit {
         (params: ParamMap) => {
           const taskId = params.get('taskId');
           if (taskId) {
-            console.log('inventory id ', taskId)
+            console.log('task id ', taskId)
             this.taskService.getTaskById(taskId).subscribe((res: any) => {
               this.taskData = res;
               console.log(res)
@@ -57,8 +57,7 @@ export class AddEditTaskComponent implements OnInit {
       title: [this.taskData?.title ? this.taskData?.title : '', Validators.required],
       description: [this.taskData?.description ? this.taskData?.description : '', ],
       status: [this.taskData?.status ? this.taskData?.status : 'Pending', [Validators.required,]],
-      createdAt: [this.taskData?.createdAt ? this.taskData?.createdAt : new Date(), Validators.required],
-    })
+    });
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -67,6 +66,12 @@ export class AddEditTaskComponent implements OnInit {
 
   public back() {
     this.location.back();
+  }
+
+  onStatusChange(event: any) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const newStatus = isChecked ? 'Completed' : 'Pending';
+    this.taskForm.get('status')?.setValue(newStatus);
   }
 
   public addEditTask() {
@@ -85,9 +90,8 @@ export class AddEditTaskComponent implements OnInit {
         console.error('error', error);
       });
     } else {
-      // this.taskForm.createdAt = new Date();
       this.taskService.addTask(this.taskForm.value).subscribe(res => {
-        this.router.navigate(['']);
+        this.router.navigate(['/']);
         this.taskForm.reset();
         this.loading = false;
       }, error => {

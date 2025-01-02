@@ -12,18 +12,22 @@ import { RouterLink } from '@angular/router';
 })
 export class TaskManagerComponent implements OnInit {
   public allTaskData: any = [];
+  public loading: boolean = true;
 
   constructor(
     private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
-    alert();
     this.getAllTask();
   }
   private getAllTask() {
     this.taskService.getTasks().subscribe((taskData: any) => {
       this.allTaskData = taskData;
+      this.loading = false;
+    }, (error: any) => {
+      this.loading = false;
+      console.log("Error", error);
     });
   }
 
