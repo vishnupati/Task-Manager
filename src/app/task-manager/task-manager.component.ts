@@ -41,4 +41,13 @@ export class TaskManagerComponent implements OnInit {
       console.log("error", error);
     });
   }
+
+  onStatusChange(event: any, taskData: any) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    taskData.status = isChecked ? 'Completed' : 'Pending';
+    this.taskService.updateTask(taskData._id, taskData).subscribe(() => {
+    }, error => {
+      console.error('error', error);
+    });
+  }
 }
