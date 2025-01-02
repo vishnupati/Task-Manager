@@ -31,12 +31,12 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-end mb-3">
-                      <div class="col-6 col-md-4 col-sm-4 d-grid">
+                      <div class="col-6 col-md-5 col-sm-5 d-grid">
                         <button class="btn back-btn btn-medium" type="button" [disabled]="loading" (click)="back()">
                           <span>Back</span>
                         </button>
                       </div>
-                      <div class="col-6 col-md-4 col-sm-4 d-grid">
+                      <div class="col-6 col-md-5 col-sm-5 d-grid">
                         <button class="btn btn-primary text-light" type="submit" [disabled]="loading" (click)="addEditTask()">
                           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span> {{taskData ? "Save changes" : 'Add task'}}
                         </button>
