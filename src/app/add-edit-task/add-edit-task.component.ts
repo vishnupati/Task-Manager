@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators, AbstractControl, ReactiveFormsModule, FormControl} from '@angular/forms'
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { CommonModule, Location } from '@angular/common';
   templateUrl: './add-edit-task.component.html',
   styleUrl: './add-edit-task.component.scss'
 })
-export class AddEditTaskComponent implements OnInit {
+export class AddEditTaskComponent implements OnInit, OnDestroy {
   public taskForm: FormGroup = new FormGroup({
     title: new FormControl(),
     description: new FormControl(),
@@ -82,14 +82,17 @@ export class AddEditTaskComponent implements OnInit {
       return;
     }
     if (this.taskData) {
+      this.subscriptions.push(
       this.taskService.updateTask(this.taskData._id, this.taskForm.value).subscribe(() => {
         this.router.navigate(['/']);
         this.taskForm.reset();
         this.loading = false;
       }, error => {
         console.error('error', error);
-      });
+      })
+    );
     } else {
+      this.subscriptions.push(
       this.taskService.addTask(this.taskForm.value).subscribe(res => {
         this.router.navigate(['/']);
         this.taskForm.reset();
@@ -97,7 +100,15 @@ export class AddEditTaskComponent implements OnInit {
       }, error => {
         this.loading = false;
         console.error('error', error);
-      });
+      })
+
+      );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.map( subscriber => {
+      subscriber.unsubscribe();
+    }); 
   }
 }
