@@ -1,0 +1,50 @@
+<div class="notification-drawer-overlay" [class.open]="isOpen" (click)="close()"></div>
+
+<div class="notification-drawer" [class.open]="isOpen">
+    <!-- Header -->
+    <div class="drawer-header">
+        <h2>Notifications</h2>
+        <button class="close-btn" (click)="close()" title="Close">✕</button>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" *ngIf="status$ | async as status">
+        <span class="status-badge" [class.connected]="status.connected" [class.disconnected]="!status.connected">
+            <span class="status-dot"></span>
+            {{ status.connected ? 'Connected' : 'Disconnected' }}
+        </span>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notifications-list" *ngIf="(notifications$ | async) as notifications">
+        <!-- Empty State -->
+        <div *ngIf="notifications.length === 0" class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <p>No notifications</p>
+        </div>
+
+        <!-- Notifications -->
+        <div *ngFor="let notification of notifications; trackBy: trackByNotificationId" class="notification-item"
+            [class.unread]="!notification.read" (click)="markAsRead(notification)">
+            <div class="notification-icon">{{ getNotificationIcon(notification.type) }}</div>
+            <div class="notification-content">
+                <h4 class="notification-title">{{ notification.title }}</h4>
+                <p class="notification-message">{{ notification.message }}</p>
+                <small class="notification-time">
+                    {{ notification.createdAt | date : 'short' }}
+                </small>
+            </div>
+            <div class="unread-indicator" *ngIf="!notification.read"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="drawer-footer">
+        <button class="action-btn" (click)="markAllAsRead()" title="Mark all as read">
+            Mark all as read
+        </button>
+        <button class="action-btn delete-btn" (click)="clearAll()" title="Clear all">
+            Clear All
+        </button>
+    </div>
+</div>

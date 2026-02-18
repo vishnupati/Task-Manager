@@ -21,6 +21,7 @@ export class TaskManagerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAllTask();
+    // this.getCounrtryList()
   }
   private getAllTask() {
     this.subscriptions.push(
@@ -63,5 +64,35 @@ export class TaskManagerComponent implements OnInit, OnDestroy {
     this.subscriptions.map( subscriber => {
       subscriber.unsubscribe();
     }); 
+  }
+
+  addAudit() {
+    const auditData = {
+  "userId": "cmjnxihsr000008v5xxzzx96o",
+  "role": "User", //e.g. "Admin", "User", "Member", "SuperAdmin"
+  "eventType": "Login", //e.g. "Registration", "Login", "Approved", "Rejected", "Inactive", "Suspended", "Deleted", "Updated", "Created", "Deleted", "Updated",
+  "entityType": "Users", //e.g. "Applications" , "Users", "Tiers" , "Upgrade-requests"
+  "entityId": "cmjnxihsr000008v5xxzzx96o", // 
+  "status": "Success", // e.g., "Success", "Failure", "Viewed", "Initiated"
+  "message": "User logged in successfully", // e.g., "User logged in successfully", "Failed to log in", "Login pending",
+  "source": "Frontend", //e.g. "Frontend" or "Backend"
+  "ipAddress": "192.168.1.25",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)", // e.g. Browser name
+  "platform": "Browser", //e.g. OS platform 
+  "deviceType": "Desktop" //e.g. "Desktop", "Mobile", "Tablet"
+}
+    this.taskService.addAudit(auditData).subscribe((res: any) => {
+      console.log('Audit added:', res);
+    }, (error: any) => {
+      console.error('Error adding audit:', error);
+    });
+  }
+
+  getCounrtryList() {
+    this.taskService.getCountryList().subscribe((res: any) => {
+      console.log('Country list:', res);
+    }, (error: any) => {
+      console.error('Error fetching country list:', error);
+    });
   }
 }

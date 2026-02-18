@@ -1,15 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav-color">
-    <div class="container-fluid">
-      <a class="navbar-brand" >Task mananger</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarScroll">
-        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-        </ul>
+  <div class="container-fluid">
+    <a class="navbar-brand">Task Manager</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+      </ul>
+
+      <!-- Notification Icon -->
+      <div class="navbar-actions">
+        <button class="notification-btn" (click)="toggleNotificationDrawer()" title="Notifications"
+          [class.active]="isNotificationDrawerOpen">
+          <span class="notification-icon">🔔</span>
+          <span class="notification-badge" *ngIf="(unreadCount$ | async) as count" [class.show]="count > 0">
+            {{ count > 99 ? '99+' : count }}
+          </span>
+          <span class="status-indicator" *ngIf="status$ | async as status" [class.online]="status.connected"
+            [class.offline]="!status.connected"></span>
+        </button>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+<!-- Notification Drawer -->
+<app-notification-drawer [isOpen]="isNotificationDrawerOpen"
+  (closeDrawer)="closeNotificationDrawer()"></app-notification-drawer>
