@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Initialize notification connection
-    const token = localStorage.getItem('auth_token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtbGplb2ZpaTAwMDBuY3Y1b2J6aGczN28iLCJmdWxsTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJsaWZyaWNhbHRkQGdtYWlsLmNvbSIsInJvbGUiOiJTdXBlckFkbWluIiwiY291bnRyeUNvZGUiOiI5MSIsImlhdCI6MTc3MTQyMDA5MSwiZXhwIjoxNzcxNTA2NDkxLCJ0eXBlIjoiYWNjZXNzIn0.NoPoVeOGnKBYwkxR_pyhCraWQ6dd8ALBkUbdkPuc9XE';
+    const token = localStorage.getItem('auth_token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtbHQxbnl4MzAwMDF3b3Y1ZXF2azUyZjQiLCJmaXJzdE5hbWUiOiIiLCJsYXN0TmFtZSI6IiIsImVtYWlsIjpudWxsLCJyb2xlIjoiVXNlciIsImNvdW50cnlDb2RlIjoiKzkxIiwiaWF0IjoxNzcxNDgwMzU2LCJleHAiOjE3NzE1NjY3NTYsInR5cGUiOiJhY2Nlc3MifQ.tkEKWFeVj0AgulgQSdi_z0N6wrsrEsjarGF1t48VqzU';
     this.notificationService.connect(environment.notificationServiceUrl, token);
     // `Userconnect` kept for backward-compatibility; prefer `connect` with the notifications URL.
     this.notificationService.Userconnect(environment.userserviceLiveUrl, token);

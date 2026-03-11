@@ -1,0 +1,61 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: task-manager
+  namespace: task-manager
+  labels:
+    app.kubernetes.io/name: task-manager
+    app.kubernetes.io/component: autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: task-manager
+
+  # ── Replica bounds ─────────────────────────────────────────────────────────
+  minReplicas: 2 # always keep at least 2 pods for HA
+  maxReplicas: 10 # hard ceiling
+
+  # ── Scaling metrics ────────────────────────────────────────────────────────
+  metrics:
+    # Scale up when average CPU across all pods exceeds 70%
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+
+    # Scale up when average memory across all pods exceeds 80%
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+  # ── Scaling behaviour ──────────────────────────────────────────────────────
+  behavior:
+    scaleUp:
+      # React to spikes quickly
+      stabilizationWindowSeconds: 30
+      policies:
+        # Allow adding up to 2 pods every 30 seconds
+        - type: Pods
+          value: 2
+          periodSeconds: 30
+        # Allow doubling pod count every 60 seconds (whichever is higher wins)
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+      selectPolicy: Max
+
+    scaleDown:
+      # Wait 3 minutes of low traffic before removing pods (avoid flapping)
+      stabilizationWindowSeconds: 180
+      policies:
+        # Remove at most 1 pod every 60 seconds on scale-down
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+      selectPolicy: Min

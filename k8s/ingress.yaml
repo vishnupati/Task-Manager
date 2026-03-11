@@ -1,0 +1,66 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: task-manager
+  namespace: task-manager
+  labels:
+    app.kubernetes.io/name: task-manager
+    app.kubernetes.io/component: ingress
+  annotations:
+    # ── nginx Ingress Controller ────────────────────────────────────────────
+    kubernetes.io/ingress.class: "nginx"
+
+    # Force HTTPS — redirect all HTTP → HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+    # Proxy timeouts (important for SSR responses)
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+
+    # Enable gzip compression
+    nginx.ingress.kubernetes.io/enable-compression: "true"
+
+    # Rate limiting — protect against traffic spikes
+    # 100 requests per second per IP, burst of 200
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "2"
+
+    # ── cert-manager (automatic TLS via Let's Encrypt) ──────────────────────
+    # Requires cert-manager to be installed in the cluster.
+    # Install: https://cert-manager.io/docs/installation/
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  # TLS — cert-manager will automatically provision and renew the certificate
+  tls:
+    - hosts:
+        # Replace with your actual domain
+        - yourdomain.com
+        - www.yourdomain.com
+      secretName: task-manager-tls
+
+  rules:
+    # Replace with your actual domain
+    - host: yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: task-manager
+                port:
+                  name: http
+
+    - host: www.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: task-manager
+                port:
+                  name: http

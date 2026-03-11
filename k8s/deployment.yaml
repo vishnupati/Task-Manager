@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-manager
+  namespace: task-manager
+  labels:
+    app.kubernetes.io/name: task-manager
+    app.kubernetes.io/component: web
+  annotations:
+    # Enables zero-downtime rolling updates
+    kubernetes.io/change-cause: "initial deployment"
+spec:
+  # Initial replica count — HPA will take over after applying hpa.yaml
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: task-manager
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # At most 1 extra pod during rollout
+      maxSurge: 1
+      # At least 1 pod remains available during rollout
+      maxUnavailable: 0
+
+  template:
+    metadata:
+      labels:
+        app: task-manager
+        app.kubernetes.io/name: task-manager
+        app.kubernetes.io/component: web
+    spec:
+      # Spread pods across different nodes for high availability
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: task-manager
+
+      containers:
+        - name: task-manager
+          # ── Replace with your actual image path ──────────────────────────
+          # Examples:
+          #   Docker Hub:       youruser/task-manager:latest
+          #   GCP Artifact Reg: europe-west1-docker.pkg.dev/PROJECT/REPO/task-manager:latest
+          #   AWS ECR:          123456789.dkr.ecr.us-east-1.amazonaws.com/task-manager:latest
+          image: youruser/task-manager:latest
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 4000
+              protocol: TCP
+
+          # Load env from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: task-manager-config
+
+          # Uncomment to pull secrets (e.g. API keys) from a Kubernetes Secret
+          # env:
+          #   - name: API_SECRET_KEY
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: task-manager-secret
+          #         key: API_SECRET_KEY
+
+          # ── Resource requests & limits ────────────────────────────────────
+          # Requests: guaranteed allocation (used by HPA for CPU/memory scaling)
+          # Limits:   hard cap — pod is OOMKilled / throttled if exceeded
+          resources:
+            requests:
+              cpu: "100m" # 0.1 CPU core
+              memory: "128Mi"
+            limits:
+              cpu: "500m" # 0.5 CPU core
+              memory: "512Mi"
+
+          # ── Liveness probe — restart the pod if the app hangs ────────────
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # ── Readiness probe — only send traffic when the app is ready ────
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # ── Startup probe — gives extra time on cold-start ───────────────
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 10
+            periodSeconds: 5
+
+      # Graceful shutdown — wait up to 30 s for in-flight requests to finish
+      terminationGracePeriodSeconds: 30

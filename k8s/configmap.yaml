@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: task-manager-config
+  namespace: task-manager
+  labels:
+    app.kubernetes.io/name: task-manager
+    app.kubernetes.io/component: config
+data:
+  NODE_ENV: "production"
+  PORT: "4000"
+  # Add any additional non-secret environment variables below
+  # API_BASE_URL: "https://your-api.example.com"

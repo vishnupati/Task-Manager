@@ -1,0 +1,39 @@
+# Dependencies & build outputs
+node_modules
+dist
+.angular
+
+# Version control
+.git
+.gitignore
+
+# IDE / editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test & coverage output
+coverage
+.nyc_output
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files (never bake secrets into the image)
+.env
+.env.*
+!.env.example
+
+# CI artifacts
+.github
+
+# Docker itself
+Dockerfile
+.dockerignore
+docker-compose*.yml
