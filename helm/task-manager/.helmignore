@@ -1,0 +1,15 @@
+# Common VCS and editor files
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Build artifacts
+node_modules/
+dist/
+coverage/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

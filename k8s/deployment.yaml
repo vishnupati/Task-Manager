@@ -48,8 +48,8 @@ spec:
           #   Docker Hub:       youruser/task-manager:latest
           #   GCP Artifact Reg: europe-west1-docker.pkg.dev/PROJECT/REPO/task-manager:latest
           #   AWS ECR:          123456789.dkr.ecr.us-east-1.amazonaws.com/task-manager:latest
-          image: youruser/task-manager:latest
-          imagePullPolicy: Always
+          image: task-manager:latest
+          imagePullPolicy: IfNotPresent
 
           ports:
             - name: http
